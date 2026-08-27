@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrepreneurship Daily Kickoff Hub</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            }
+          },
+          animation: {
+            'bounce-short': 'bounce 0.8s ease-in-out 1',
+            'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom perspective for 3D card flips */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.5);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-full flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-brand-600/20">
+          <i class="fa-solid font-bold text-slate-950 text-xl fa-rocket"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            The Daily Launchpad
+            <span class="text-xs px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 font-semibold border border-brand-500/20">Entrepreneurship I</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Class Duty Kickoff & Icebreaker Dashboard</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Date Badge -->
+        <div class="hidden md:flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 text-xs font-medium text-slate-300">
+          <i class="fa-regular fa-calendar-check text-brand-400"></i>
+          <span id="current-date-display">Today</span>
+        </div>
+
+        <button id="copy-summary-btn" title="Copy slide content to clipboard" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition active:scale-95">
+          <i class="fa-regular fa-copy text-brand-400"></i>
+          <span class="hidden sm:inline">Copy Slide</span>
+        </button>
+
+        <button id="fullscreen-toggle-btn" title="Projector Mode" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition active:scale-95">
+          <i class="fa-solid fa-expand"></i>
+          <span class="hidden sm:inline">Presenter Mode</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+    
+    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-slate-950/40 p-3 rounded-2xl border border-slate-800/80">
+      
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center space-x-1 overflow-x-auto pb-1 md:pb-0" id="category-filters">
+        <button data-cat="all" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-brand-500 text-slate-950 shadow font-semibold transition">
+          <i class="fa-solid fa-layer-group mr-1.5"></i>All Topics
+        </button>
+        <button data-cat="mindset" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+          <i class="fa-solid fa-brain mr-1.5 text-amber-400"></i>Mindset & Grit
+        </button>
+        <button data-cat="innovation" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+          <i class="fa-solid fa-lightbulb mr-1.5 text-cyan-400"></i>Innovation & Tech
+        </button>
+        <button data-cat="business" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+          <i class="fa-solid fa-chart-line mr-1.5 text-emerald-400"></i>Business & Sales
+        </button>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="flex items-center space-x-3 shrink-0 justify-end">
+        <!-- Built-in Timer Button -->
+        <button id="timer-toggle-btn" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium flex items-center gap-2 border border-slate-700 transition">
+          <i class="fa-solid fa-stopwatch text-indigo-400"></i>
+          <span>Icebreaker Timer: <strong id="timer-display-short">02:00</strong></span>
+        </button>
+
+        <!-- Global Shuffle -->
+        <button id="shuffle-all-btn" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-500/20 active:scale-95 transition">
+          <i class="fa-solid fa-shuffle"></i>
+          <span>Shuffle All 3</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3-Column Kickoff Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
+      
+      <!-- CARD 1: MOTIVATIONAL QUOTE -->
+      <div class="bg-gradient-to-b from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-700/60 p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition duration-500"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/20">
+              <i class="fa-solid fa-quote-left"></i> Daily Mindset
+            </span>
+            <button id="next-quote-btn" title="Next Quote" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition active:scale-95 border border-slate-700">
+              <i class="fa-solid fa-rotate text-xs"></i>
+            </button>
+          </div>
+
+          <blockquote class="my-4">
+            <p id="quote-text" class="text-xl font-bold text-slate-100 leading-relaxed italic">
+              "The secret to getting ahead is getting started."
+            </p>
+          </blockquote>
+
+          <div class="mt-4 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-sm" id="quote-avatar">
+              M
+            </div>
+            <div>
+              <p id="quote-author" class="text-sm font-semibold text-amber-300">Mark Twain</p>
+              <p id="quote-role" class="text-xs text-slate-400">Author & Entrepreneur</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class Discussion Prompt -->
+        <div class="mt-6 pt-4 border-t border-slate-700/50 bg-slate-950/30 -mx-6 -mb-6 p-4 rounded-b-2xl">
+          <p class="text-xs font-semibold text-amber-400/90 flex items-center gap-1.5 mb-1">
+            <i class="fa-solid fa-comments"></i> Classroom Reflection Prompt:
+          </p>
+          <p id="quote-prompt" class="text-xs text-slate-300 leading-relaxed">
+            What is one small step you can take today on your main project to build instant momentum?
+          </p>
+        </div>
+      </div>
+
+      <!-- CARD 2: CLASSROOM JOKE -->
+      <div class="bg-gradient-to-b from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-700/60 p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition duration-500"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-400/10 px-2.5 py-1 rounded-md border border-cyan-400/20">
+              <i class="fa-solid fa-face-laugh-beam"></i> Entrepreneur Humor
+            </span>
+            <button id="next-joke-btn" title="Next Joke" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition active:scale-95 border border-slate-700">
+              <i class="fa-solid fa-rotate text-xs"></i>
+            </button>
+          </div>
+
+          <div class="my-3">
+            <span id="joke-tag" class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest bg-slate-800 px-2 py-0.5 rounded">Startup Pun</span>
+            <p id="joke-setup" class="text-lg font-semibold text-slate-100 mt-2 leading-relaxed">
+              Why did the entrepreneur open a bakery?
+            </p>
+          </div>
+        </div>
+
+        <!-- Punchline Card Reveal -->
+        <div class="mt-4">
+          <div id="punchline-container" class="bg-slate-950/60 border border-slate-700/60 rounded-xl p-4 text-center cursor-pointer hover:border-cyan-500/50 transition group/reveal">
+            <div id="punchline-hidden" class="flex flex-col items-center justify-center py-2 text-slate-400 group-hover/reveal:text-cyan-400 transition">
+              <i class="fa-solid fa-lock mb-1.5 text-sm"></i>
+              <span class="text-xs font-semibold">Click / Tap to reveal punchline!</span>
+            </div>
+            <div id="punchline-text" class="hidden text-base font-bold text-cyan-300 animate-bounce-short">
+              "Because they wanted to make some serious dough!"
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between text-xs text-slate-400 px-1">
+            <span>Rate this joke:</span>
+            <div class="flex items-center space-x-2">
+              <button class="joke-rate-btn hover:text-emerald-400 transition" data-rating="up">
+                <i class="fa-regular fa-thumbs-up"></i>
+              </button>
+              <button class="joke-rate-btn hover:text-rose-400 transition" data-rating="down">
+                <i class="fa-regular fa-thumbs-down"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: TODAY IN INNOVATION & HISTORY -->
+      <div class="bg-gradient-to-b from-slate-800/90 to-slate-900/90 rounded-2xl border border-slate-700/60 p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition duration-500"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-md border border-emerald-400/20">
+              <i class="fa-solid fa-clock-rotate-left"></i> On This Day (Aug 26)
+            </span>
+            <button id="next-history-btn" title="Next Milestone" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition active:scale-95 border border-slate-700">
+              <i class="fa-solid fa-rotate text-xs"></i>
+            </button>
+          </div>
+
+          <div class="flex items-baseline gap-2 mb-2">
+            <span id="history-year" class="text-2xl font-extrabold text-emerald-400">1856</span>
+            <span id="history-date" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">August 26</span>
+          </div>
+
+          <h3 id="history-title" class="text-lg font-bold text-slate-100 leading-snug mb-2">
+            Teenager Patents World's First Synthetic Dye
+          </h3>
+
+          <p id="history-desc" class="text-xs text-slate-300 leading-relaxed mb-3">
+            18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, created by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.
+          </p>
+
+          <!-- Words Spoken On This Day Block -->
+          <div class="my-3 p-3 bg-emerald-950/40 rounded-xl border border-emerald-500/30">
+            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+              <i class="fa-solid fa-quote-left text-xs"></i> Words Spoken On This Day:
+            </p>
+            <p id="history-quote" class="text-xs italic font-medium text-emerald-100 leading-relaxed">
+              "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution."
+            </p>
+            <p id="history-speaker" class="text-[11px] font-semibold text-emerald-400/90 text-right mt-1">
+              — William Henry Perkin
+            </p>
+          </div>
+        </div>
+
+        <!-- Entrepreneurial Lesson -->
+        <div class="pt-3 border-t border-slate-700/50">
+          <div class="bg-emerald-950/30 rounded-xl p-3 border border-emerald-500/20">
+            <p class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-graduation-cap"></i> Entrepreneur Takeaway:
+            </p>
+            <p id="history-takeaway" class="text-xs text-slate-300">
+              Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ICEBREAKER TIMER MODAL / DRAWER -->
+    <div id="timer-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-center">
+        <button id="close-timer-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+
+        <div class="w-12 h-12 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-stopwatch text-2xl"></i>
+        </div>
+
+        <h3 class="text-xl font-bold text-white mb-1">Classroom Discussion Timer</h3>
+        <p class="text-xs text-slate-400 mb-6">Give your class 1 to 3 minutes to react to today's quote or history fact.</p>
+
+        <!-- Big Display -->
+        <div id="big-timer-display" class="text-6xl font-black font-mono text-indigo-400 tracking-wider mb-6">
+          02:00
+        </div>
+
+        <!-- Timer Controls -->
+        <div class="flex justify-center items-center gap-3 mb-6">
+          <button id="start-timer-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition active:scale-95">
+            <i class="fa-solid fa-play mr-1.5"></i> Start
+          </button>
+          <button id="pause-timer-btn" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm border border-slate-700 transition active:scale-95">
+            <i class="fa-solid fa-pause mr-1.5"></i> Pause
+          </button>
+          <button id="reset-timer-btn" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-sm border border-slate-700 transition">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="flex justify-center gap-2">
+          <button class="timer-preset-btn px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300" data-seconds="60">1 Min</button>
+          <button class="timer-preset-btn px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300" data-seconds="120">2 Min</button>
+          <button class="timer-preset-btn px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300" data-seconds="180">3 Min</button>
+          <button class="timer-preset-btn px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300" data-seconds="300">5 Min</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULLSCREEN PRESENTATION OVERLAY -->
+    <div id="fullscreen-overlay" class="hidden fixed inset-0 z-50 bg-slate-950 p-6 sm:p-12 flex flex-col justify-between overflow-y-auto">
+      <!-- Presenter Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-500 text-slate-950 font-bold flex items-center justify-center text-xl">
+            <i class="fa-solid fa-rocket"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-extrabold text-white">ENTREPRENEURSHIP I — DAILY KICKOFF</h2>
+            <p class="text-xs text-brand-400 font-semibold uppercase tracking-wider" id="fs-date-display">Today's Starter Deck</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <button id="fs-shuffle-btn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
+            <i class="fa-solid fa-shuffle text-brand-400"></i> Shuffle Deck
+          </button>
+          <button id="exit-fullscreen-btn" class="px-4 py-2 bg-rose-600/20 text-rose-300 border border-rose-500/30 hover:bg-rose-600/30 rounded-xl text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-compress"></i> Exit Presenter Mode
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Presenter Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-8 flex-1 items-stretch">
+        <!-- Quote FS Card -->
+        <div class="bg-slate-900 border-2 border-amber-500/30 rounded-3xl p-8 flex flex-col justify-between shadow-2xl">
+          <div>
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-3 py-1 rounded-md">1. Daily Mindset</span>
+            <p id="fs-quote-text" class="text-2xl font-black text-white italic mt-6 leading-relaxed">""</p>
+            <p id="fs-quote-author" class="text-base font-bold text-amber-300 mt-4"></p>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mt-6">
+            <span class="text-[11px] font-bold text-amber-400 uppercase">Discussion:</span>
+            <p id="fs-quote-prompt" class="text-xs text-slate-300 mt-1"></p>
+          </div>
+        </div>
+
+        <!-- Joke FS Card -->
+        <div class="bg-slate-900 border-2 border-cyan-500/30 rounded-3xl p-8 flex flex-col justify-between shadow-2xl">
+          <div>
+            <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-400/10 px-3 py-1 rounded-md">2. Morning Humor</span>
+            <p id="fs-joke-setup" class="text-2xl font-extrabold text-white mt-6 leading-relaxed"></p>
+          </div>
+          <div id="fs-punchline-box" class="bg-slate-950 p-6 rounded-2xl border border-cyan-500/40 text-center cursor-pointer">
+            <p id="fs-punchline-text" class="text-lg font-bold text-cyan-300">Click to reveal punchline</p>
+          </div>
+        </div>
+
+        <!-- History FS Card -->
+        <div class="bg-slate-900 border-2 border-emerald-500/30 rounded-3xl p-8 flex flex-col justify-between shadow-2xl">
+          <div>
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest bg-emerald-400/10 px-3 py-1 rounded-md">3. This Day In History</span>
+            <div class="mt-4">
+              <span id="fs-history-year" class="text-3xl font-black text-emerald-400"></span>
+              <h3 id="fs-history-title" class="text-xl font-bold text-white mt-1"></h3>
+            </div>
+            <p id="fs-history-desc" class="text-xs text-slate-300 mt-3 leading-relaxed"></p>
+
+            <div class="mt-4 p-3 bg-slate-950 rounded-xl border border-emerald-500/30">
+              <span class="text-[11px] font-bold text-emerald-400 uppercase flex items-center gap-1">
+                <i class="fa-solid fa-quote-left"></i> Words Spoken On This Day:
+              </span>
+              <p id="fs-history-quote" class="text-sm italic text-emerald-100 font-medium mt-1"></p>
+              <p id="fs-history-speaker" class="text-xs font-semibold text-emerald-400 text-right mt-1"></p>
+            </div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mt-6">
+            <span class="text-[11px] font-bold text-emerald-400 uppercase">Takeaway:</span>
+            <p id="fs-history-takeaway" class="text-xs text-slate-300 mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bar -->
+      <div class="text-center text-xs text-slate-500">
+        Press <kbd class="px-2 py-0.5 bg-slate-800 rounded text-slate-300">ESC</kbd> to exit presentation mode anytime.
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-500 text-slate-950 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-semibold text-xs">
+      <i class="fa-solid fa-circle-check text-base"></i>
+      <span id="toast-message">Slide summary copied to clipboard!</span>
+    </div>
+
+  </main>
+
+  <script>
+    // DATABASE OF CURATED ENTREPRENEURSHIP CONTENT
+    const DATABASE = {
+      quotes: [
+        {
+          quote: "The way to get started is to quit talking and begin doing.",
+          author: "Walt Disney",
+          role: "Founder, The Walt Disney Company",
+          prompt: "What is one idea you have discussed a lot that you can start building today?",
+          category: "mindset"
+        },
+        {
+          quote: "Don't be intimidated by what you don't know. That can be your greatest strength and ensure you do things differently.",
+          author: "Sara Blakely",
+          role: "Founder, Spanx",
+          prompt: "What is an industry standard that you think can be completely reinvented?",
+          category: "mindset"
+        },
+        {
+          quote: "If you are not embarrassed by the first version of your product, you've launched too late.",
+          author: "Reid Hoffman",
+          role: "Co-Founder, LinkedIn",
+          prompt: "Why is shipping an imperfect Minimum Viable Product better than endless planning?",
+          category: "innovation"
+        },
+        {
+          quote: "Your most unhappy customers are your greatest source of learning.",
+          author: "Bill Gates",
+          role: "Co-Founder, Microsoft",
+          prompt: "How can customer complaints actually serve as free business advice?",
+          category: "business"
+        },
+        {
+          quote: "Failure is an option here. If things are not failing, you are not innovating enough.",
+          author: "Elon Musk",
+          role: "CEO, SpaceX & Tesla",
+          prompt: "How do you distinguish between a smart mistake and a sloppy failure?",
+          category: "innovation"
+        },
+        {
+          quote: "Whether you think you can, or you think you can't – you're right.",
+          author: "Henry Ford",
+          role: "Founder, Ford Motor Company",
+          prompt: "How does your mindset directly impact your ability to overcome project roadblocks?",
+          category: "mindset"
+        },
+        {
+          quote: "If you double the number of experiments you do per year, you're going to double your inventiveness.",
+          author: "Jeff Bezos",
+          role: "Founder, Amazon",
+          prompt: "What is a quick experiment you could run this week to test a customer preference?",
+          category: "business"
+        },
+        {
+          quote: "Chase the vision, not the money; the money will end up following you.",
+          author: "Tony Hsieh",
+          role: "Former CEO, Zappos",
+          prompt: "Why is customer obsession more sustainable than focusing purely on short-term profits?",
+          category: "business"
+        }
+      ],
+      jokes: [
+        {
+          setup: "Why did the entrepreneur open a bakery?",
+          punchline: "Because they wanted to make some serious dough!",
+          tag: "Business Pun",
+          category: "business"
+        },
+        {
+          setup: "Why was the computer late to the startup meeting?",
+          punchline: "It had a hard drive!",
+          tag: "Tech Humor",
+          category: "innovation"
+        },
+        {
+          setup: "How do accountants pay for their morning coffee?",
+          punchline: "With liquid assets!",
+          tag: "Finance Pun",
+          category: "business"
+        },
+        {
+          setup: "Why did the smartphone get hired on the spot?",
+          punchline: "Because it had outstanding cell-ular skills!",
+          tag: "Tech Humor",
+          category: "innovation"
+        },
+        {
+          setup: "What is a startup founder's favorite place to sleep?",
+          punchline: "In a pitch tent!",
+          tag: "Startup Joke",
+          category: "mindset"
+        },
+        {
+          setup: "Why did the billboard company hire a new graphic designer?",
+          punchline: "They wanted to make a clear sign of progress!",
+          tag: "Marketing Pun",
+          category: "business"
+        },
+        {
+          setup: "Why don't scientists trust atoms in business meetings?",
+          punchline: "Because they make up everything!",
+          tag: "Science & Work",
+          category: "mindset"
+        }
+      ],
+      history: [
+        {
+          date: "August 26",
+          year: "1856",
+          title: "Teenager Patents World's First Synthetic Dye",
+          desc: "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.",
+          historicalQuote: "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution.",
+          speaker: "William Henry Perkin",
+          takeaway: "Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.",
+          category: "innovation"
+        },
+        {
+          date: "August 26",
+          year: "1935",
+          title: "Birth of Karen Spärck Jones (Search Engine Pioneer)",
+          desc: "Computer scientist Karen Spärck Jones was born on this day. She created IDF (Inverse Document Frequency), the core statistical formula behind modern web search engines like Google.",
+          historicalQuote: "Computing is too important to be left to men. Words are the most complex form of data we have.",
+          speaker: "Karen Spärck Jones (Computer Scientist)",
+          takeaway: "Fundamental math formulas created decades ago power today's multi-trillion dollar search technologies.",
+          category: "innovation"
+        },
+        {
+          date: "August 26",
+          year: "1938",
+          title: "First Audio Tape Recorder Used in Live Radio Broadcast",
+          desc: "New York radio station WQXR broadcasted live using a magnetic tape recorder for the first time, revolutionizing audio broadcasting and media distribution.",
+          historicalQuote: "Recorded media liberates broadcasting from the constraints of live execution.",
+          speaker: "WQXR Broadcast Announcement",
+          takeaway: "Time-shifting tech allows creators to build content once and scale distribution endlessly.",
+          category: "business"
+        },
+        {
+          date: "August 26",
+          year: "1873",
+          title: "Birth of Lee de Forest (Inventor of Vacuum Tube)",
+          desc: "Inventor Lee de Forest was born. His invention of the Audion vacuum tube enabled sound amplification, making radio broadcasts, sound films, and early computers possible.",
+          historicalQuote: "I discovered an invisible empire of the air, and electronic amplification will build the modern world.",
+          speaker: "Lee de Forest",
+          takeaway: "Core hardware inventions unlock entirely new consumer media and computing industries.",
+          category: "innovation"
+        },
+        {
+          date: "August 26",
+          year: "1743",
+          title: "Birth of Antoine Lavoisier (Father of Chemistry)",
+          desc: "Antoine Lavoisier was born on this day. He transformed chemistry from guesswork into a quantitative science, named Oxygen and Hydrogen, and stated the Law of Conservation of Mass.",
+          historicalQuote: "Nothing is lost, nothing is created, everything is transformed.",
+          speaker: "Antoine Lavoisier",
+          takeaway: "Rigorous measurement and data collection convert messy concepts into predictable market frameworks.",
+          category: "mindset"
+        },
+        {
+          date: "August 26",
+          year: "1920",
+          title: "19th Amendment Certified (Women's Equality Day)",
+          desc: "The 19th Amendment was officially certified on this day, granting women the right to vote in the U.S. and opening new horizons for female leadership and business ownership.",
+          historicalQuote: "The day will come when men will recognize women as their peers, not only at the fireside, but in the councils of the nation.",
+          speaker: "Susan B. Anthony",
+          takeaway: "Expanding workforce and civic participation drives exponential growth in innovation and enterprise.",
+          category: "business"
+        }
+      ]
+    };
+
+    // App State Variables
+    let currentCategory = 'all';
+    let activeQuoteIndex = 0;
+    let activeJokeIndex = 0;
+    let activeHistoryIndex = 0;
+    let jokeRevealed = false;
+    let fsJokeRevealed = false;
+
+    // Timer state
+    let timerDuration = 120; // 2 mins default
+    let timerRemaining = 120;
+    let timerInterval = null;
+
+    // DOM Elements
+    const elements = {
+      quoteText: document.getElementById('quote-text'),
+      quoteAuthor: document.getElementById('quote-author'),
+      quoteRole: document.getElementById('quote-role'),
+      quotePrompt: document.getElementById('quote-prompt'),
+      quoteAvatar: document.getElementById('quote-avatar'),
+
+      jokeSetup: document.getElementById('joke-setup'),
+      jokeTag: document.getElementById('joke-tag'),
+      punchlineHidden: document.getElementById('punchline-hidden'),
+      punchlineText: document.getElementById('punchline-text'),
+      punchlineContainer: document.getElementById('punchline-container'),
+
+      historyYear: document.getElementById('history-year'),
+      historyDate: document.getElementById('history-date'),
+      historyTitle: document.getElementById('history-title'),
+      historyDesc: document.getElementById('history-desc'),
+      historyQuote: document.getElementById('history-quote'),
+      historySpeaker: document.getElementById('history-speaker'),
+      historyTakeaway: document.getElementById('history-takeaway'),
+
+      // Fullscreen Elements
+      fsOverlay: document.getElementById('fullscreen-overlay'),
+      fsQuoteText: document.getElementById('fs-quote-text'),
+      fsQuoteAuthor: document.getElementById('fs-quote-author'),
+      fsQuotePrompt: document.getElementById('fs-quote-prompt'),
+      fsJokeSetup: document.getElementById('fs-joke-setup'),
+      fsPunchlineBox: document.getElementById('fs-punchline-box'),
+      fsPunchlineText: document.getElementById('fs-punchline-text'),
+      fsHistoryYear: document.getElementById('fs-history-year'),
+      fsHistoryTitle: document.getElementById('fs-history-title'),
+      fsHistoryDesc: document.getElementById('fs-history-desc'),
+      fsHistoryQuote: document.getElementById('fs-history-quote'),
+      fsHistorySpeaker: document.getElementById('fs-history-speaker'),
+      fsHistoryTakeaway: document.getElementById('fs-history-takeaway'),
+      fsDateDisplay: document.getElementById('fs-date-display'),
+
+      toast: document.getElementById('toast'),
+      toastMessage: document.getElementById('toast-message'),
+      currentDateDisplay: document.getElementById('current-date-display')
+    };
+
+    // Initialize date display
+    function initDate() {
+      const now = new Date();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      const formatted = now.toLocaleDateString('en-US', options);
+      elements.currentDateDisplay.textContent = formatted;
+      elements.fsDateDisplay.textContent = formatted;
+    }
+
+    // Filter items based on selected category
+    function getFilteredList(type) {
+      if (currentCategory === 'all') return DATABASE[type];
+      return DATABASE[type].filter(item => item.category === currentCategory || !item.category);
+    }
+
+    // Render Quote Card
+    function renderQuote() {
+      const list = getFilteredList('quotes');
+      if (list.length === 0) return;
+      if (activeQuoteIndex >= list.length) activeQuoteIndex = 0;
+      
+      const item = list[activeQuoteIndex];
+      elements.quoteText.textContent = `"${item.quote}"`;
+      elements.quoteAuthor.textContent = item.author;
+      elements.quoteRole.textContent = item.role;
+      elements.quotePrompt.textContent = item.prompt;
+      elements.quoteAvatar.textContent = item.author.charAt(0);
+
+      // Presenter overlay sync
+      elements.fsQuoteText.textContent = `"${item.quote}"`;
+      elements.fsQuoteAuthor.textContent = `— ${item.author} (${item.role})`;
+      elements.fsQuotePrompt.textContent = item.prompt;
+    }
+
+    // Render Joke Card
+    function renderJoke() {
+      const list = getFilteredList('jokes');
+      if (list.length === 0) return;
+      if (activeJokeIndex >= list.length) activeJokeIndex = 0;
+
+      const item = list[activeJokeIndex];
+      elements.jokeSetup.textContent = item.setup;
+      elements.jokeTag.textContent = item.tag;
+      elements.punchlineText.textContent = `"${item.punchline}"`;
+
+      // Reset punchline state
+      jokeRevealed = false;
+      elements.punchlineHidden.classList.remove('hidden');
+      elements.punchlineText.classList.add('hidden');
+
+      // Presenter overlay sync
+      elements.fsJokeSetup.textContent = item.setup;
+      fsJokeRevealed = false;
+      elements.fsPunchlineText.textContent = "Click to reveal punchline";
+      elements.fsPunchlineText.className = "text-lg font-bold text-slate-400 italic";
+    }
+
+    // Render History Card
+    function renderHistory() {
+      const list = getFilteredList('history');
+      if (list.length === 0) return;
+      if (activeHistoryIndex >= list.length) activeHistoryIndex = 0;
+
+      const item = list[activeHistoryIndex];
+      elements.historyYear.textContent = item.year;
+      elements.historyDate.textContent = item.date;
+      elements.historyTitle.textContent = item.title;
+      elements.historyDesc.textContent = item.desc;
+      elements.historyQuote.textContent = `"${item.historicalQuote}"`;
+      elements.historySpeaker.textContent = `— ${item.speaker}`;
+      elements.historyTakeaway.textContent = item.takeaway;
+
+      // Presenter overlay sync
+      elements.fsHistoryYear.textContent = `${item.date}, ${item.year}`;
+      elements.fsHistoryTitle.textContent = item.title;
+      elements.fsHistoryDesc.textContent = item.desc;
+      elements.fsHistoryQuote.textContent = `"${item.historicalQuote}"`;
+      elements.fsHistorySpeaker.textContent = `— ${item.speaker}`;
+      elements.fsHistoryTakeaway.textContent = item.takeaway;
+    }
+
+    // Shuffle All Cards
+    function shuffleAll() {
+      const quotes = getFilteredList('quotes');
+      const jokes = getFilteredList('jokes');
+      const history = getFilteredList('history');
+
+      activeQuoteIndex = Math.floor(Math.random() * quotes.length);
+      activeJokeIndex = Math.floor(Math.random() * jokes.length);
+      activeHistoryIndex = Math.floor(Math.random() * history.length);
+
+      renderQuote();
+      renderJoke();
+      renderHistory();
+      showToast("Shuffled new starter slide deck!");
+    }
+
+    // Timer Functions
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const s = (seconds % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updateTimerDisplays() {
+      const formatted = formatTime(timerRemaining);
+      document.getElementById('timer-display-short').textContent = formatted;
+      document.getElementById('big-timer-display').textContent = formatted;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          updateTimerDisplays();
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          showToast("⏰ Icebreaker discussion time is up!");
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetTimer(newSeconds = timerDuration) {
+      pauseTimer();
+      timerDuration = newSeconds;
+      timerRemaining = newSeconds;
+      updateTimerDisplays();
+    }
+
+    // Toast Notification Utility
+    function showToast(msg) {
+      elements.toastMessage.textContent = msg;
+      elements.toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        elements.toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // Copy formatted slide text to clipboard
+    function copySlideSummary() {
+      const quote = getFilteredList('quotes')[activeQuoteIndex];
+      const joke = getFilteredList('jokes')[activeJokeIndex];
+      const history = getFilteredList('history')[activeHistoryIndex];
+
+      const text = `🚀 ENTREPRENEURSHIP CLASS DAILY STARTER
+Date: ${elements.currentDateDisplay.textContent}
+
+💡 DAILY MINDSET QUOTE:
+"${quote.quote}"
+— ${quote.author} (${quote.role})
+Discussion Prompt: ${quote.prompt}
+
+😄 MORNING HUMOR:
+Q: ${joke.setup}
+A: ${joke.punchline}
+
+📅 ON THIS DAY IN HISTORY (${history.date}, ${history.year}):
+${history.title}
+Summary: ${history.desc}
+Words Spoken On This Day: "${history.historicalQuote}" — ${history.speaker}
+Entrepreneurial Lesson: ${history.takeaway}`;
+
+      // Clipboard fallback
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      showToast("Copied daily kickoff text to clipboard!");
+    }
+
+    // Setup Event Listeners
+    function setupEventListeners() {
+      // Category Buttons
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.cat-btn').forEach(b => {
+            b.className = 'cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+          });
+          btn.className = 'cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-500 text-slate-950 shadow transition';
+          currentCategory = btn.getAttribute('data-cat');
+          shuffleAll();
+        });
+      });
+
+      // Next Buttons
+      document.getElementById('next-quote-btn').addEventListener('click', () => {
+        const list = getFilteredList('quotes');
+        activeQuoteIndex = (activeQuoteIndex + 1) % list.length;
+        renderQuote();
+      });
+
+      document.getElementById('next-joke-btn').addEventListener('click', () => {
+        const list = getFilteredList('jokes');
+        activeJokeIndex = (activeJokeIndex + 1) % list.length;
+        renderJoke();
+      });
+
+      document.getElementById('next-history-btn').addEventListener('click', () => {
+        const list = getFilteredList('history');
+        activeHistoryIndex = (activeHistoryIndex + 1) % list.length;
+        renderHistory();
+      });
+
+      // Joke Punchline Reveal
+      elements.punchlineContainer.addEventListener('click', () => {
+        jokeRevealed = !jokeRevealed;
+        if (jokeRevealed) {
+          elements.punchlineHidden.classList.add('hidden');
+          elements.punchlineText.classList.remove('hidden');
+        } else {
+          elements.punchlineHidden.classList.remove('hidden');
+          elements.punchlineText.classList.add('hidden');
+        }
+      });
+
+      // Presenter Overlay Punchline Reveal
+      elements.fsPunchlineBox.addEventListener('click', () => {
+        const item = getFilteredList('jokes')[activeJokeIndex];
+        fsJokeRevealed = !fsJokeRevealed;
+        if (fsJokeRevealed) {
+          elements.fsPunchlineText.textContent = `"${item.punchline}"`;
+          elements.fsPunchlineText.className = "text-xl font-black text-cyan-300 animate-bounce-short";
+        } else {
+          elements.fsPunchlineText.textContent = "Click to reveal punchline";
+          elements.fsPunchlineText.className = "text-lg font-bold text-slate-400 italic";
+        }
+      });
+
+      // Shuffle All Button
+      document.getElementById('shuffle-all-btn').addEventListener('click', shuffleAll);
+      document.getElementById('fs-shuffle-btn').addEventListener('click', shuffleAll);
+
+      // Copy Summary
+      document.getElementById('copy-summary-btn').addEventListener('click', copySlideSummary);
+
+      // Fullscreen Presenter Mode Toggle
+      document.getElementById('fullscreen-toggle-btn').addEventListener('click', () => {
+        elements.fsOverlay.classList.remove('hidden');
+      });
+
+      document.getElementById('exit-fullscreen-btn').addEventListener('click', () => {
+        elements.fsOverlay.classList.add('hidden');
+      });
+
+      // Escape key exits presenter mode
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !elements.fsOverlay.classList.contains('hidden')) {
+          elements.fsOverlay.classList.add('hidden');
+        }
+      });
+
+      // Timer Modal Triggers
+      const timerModal = document.getElementById('timer-modal');
+      document.getElementById('timer-toggle-btn').addEventListener('click', () => {
+        timerModal.classList.remove('hidden');
+      });
+      document.getElementById('close-timer-btn').addEventListener('click', () => {
+        timerModal.classList.add('hidden');
+      });
+
+      // Timer Controls
+      document.getElementById('start-timer-btn').addEventListener('click', startTimer);
+      document.getElementById('pause-timer-btn').addEventListener('click', pauseTimer);
+      document.getElementById('reset-timer-btn').addEventListener('click', () => resetTimer());
+
+      document.querySelectorAll('.timer-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const secs = parseInt(btn.getAttribute('data-seconds'), 10);
+          resetTimer(secs);
+        });
+      });
+    }
+
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      initDate();
+      setupEventListeners();
+      shuffleAll();
+    });
+  </script>
+</body>
+</html>
