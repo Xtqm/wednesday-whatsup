@@ -72,6 +72,14 @@
 
       <!-- Quick Actions -->
       <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Date Selector -->
+        <div id="date-picker-container" class="flex items-center space-x-1.5 bg-slate-800/90 px-2.5 py-1 rounded-lg border border-slate-700/70 text-xs shadow-sm">
+          <i class="fa-regular fa-calendar-days text-brand-400"></i>
+          <select id="date-select" class="bg-transparent text-xs font-bold text-slate-200 focus:outline-none cursor-pointer pr-1">
+            <option value="09-02" class="bg-slate-900 text-slate-200">September 2 (Today)</option>
+          </select>
+        </div>
+
         <!-- Data Source Status Badge -->
         <div id="data-status-badge" class="hidden lg:flex items-center space-x-1.5 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60 text-[11px] font-medium text-slate-400" title="Source of today's slide content">
           <span class="w-2 h-2 rounded-full bg-amber-400" id="data-status-dot"></span>
@@ -419,42 +427,57 @@
   <script>
     // DEFAULT EMBEDDED BACKUP IN CASE JSON CANNOT BE LOADED VIA FETCH
     const FALLBACK_DATABASE = {
-      quotes: [
-        {
-          quote: "The way to get started is to quit talking and begin doing.",
-          author: "Walt Disney",
-          role: "Founder, The Walt Disney Company",
-          prompt: "What is one idea you have discussed a lot that you can start building today?",
-          category: "mindset"
-        },
-        {
-          quote: "Don't be intimidated by what you don't know. That can be your greatest strength.",
-          author: "Sara Blakely",
-          role: "Founder, Spanx",
-          prompt: "What is an industry standard that you think can be completely reinvented?",
-          category: "mindset"
+      dates: {
+        "09-02": {
+          label: "September 2",
+          quotes: [
+            {
+              quote: "Success breeds complacency. Complacency breeds failure. Only the paranoid survive.",
+              author: "Andy Grove",
+              role: "Co-Founder & 3rd CEO, Intel (Born Sept 2, 1936)",
+              prompt: "How do market-leading businesses prevent complacency before a new disruptor arrives?",
+              category: "mindset"
+            },
+            {
+              quote: "The only way to win is to learn faster than anyone else.",
+              author: "Eric Ries",
+              role: "Author, The Lean Startup",
+              prompt: "What fast feedback loop can an early-stage startup build to test customer demand?",
+              category: "innovation"
+            }
+          ],
+          jokes: [
+            {
+              setup: "Why was the first ATM in 1969 such a great entrepreneur?",
+              punchline: "Because it had outstanding cash flow and worked 24/7 without taking a coffee break!",
+              tag: "Fintech & Banking",
+              category: "business"
+            }
+          ],
+          history: [
+            {
+              date: "September 2",
+              year: "1969",
+              title: "Birth of ARPANET: The Infant Internet Takes Its First Breath",
+              desc: "At UCLA, computer scientist Leonard Kleinrock's team connected a host computer to an Interface Message Processor (IMP), transmitting data packets between machines for the very first time.",
+              historicalQuote: "This was the day the infant Internet took its first breath of life, proving packet-switching could link machines together.",
+              speaker: "Dr. Leonard Kleinrock (Internet Pioneer & UCLA Professor)",
+              takeaway: "Revolutionary platforms start by getting two simple nodes talking to each other before scaling to billions of users.",
+              category: "innovation"
+            },
+            {
+              date: "September 2",
+              year: "1969",
+              title: "America's First ATM Installed at Chemical Bank",
+              desc: "Chemical Bank in Rockville Centre, New York unveiled the first Automated Teller Machine (Docutel) in the United States, kickstarting the modern 24/7 self-service fintech revolution.",
+              historicalQuote: "On September 2, our bank will open at 9:00 AM and never close again!",
+              speaker: "Chemical Bank Launch Campaign (1969)",
+              takeaway: "Eliminating consumer friction points through automation creates 24/7 accessibility and permanently shifts industry standards.",
+              category: "business"
+            }
+          ]
         }
-      ],
-      jokes: [
-        {
-          setup: "Why did the entrepreneur open a bakery?",
-          punchline: "Because they wanted to make some serious dough!",
-          tag: "Business Pun",
-          category: "business"
-        }
-      ],
-      history: [
-        {
-          date: "August 26",
-          year: "1856",
-          title: "Teenager Patents World's First Synthetic Dye",
-          desc: "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine.",
-          historicalQuote: "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution.",
-          speaker: "William Henry Perkin",
-          takeaway: "Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.",
-          category: "innovation"
-        }
-      ]
+      }
     };
 
     // ACTIVE DATABASE
@@ -462,6 +485,7 @@
 
     // App State Variables
     let currentCategory = 'all';
+    let activeDateKey = '09-02';
     let activeQuoteIndex = 0;
     let activeJokeIndex = 0;
     let activeHistoryIndex = 0;
@@ -475,6 +499,7 @@
 
     // DOM Elements Cache
     const elements = {
+      dateSelect: document.getElementById('date-select'),
       quoteText: document.getElementById('quote-text'),
       quoteAuthor: document.getElementById('quote-author'),
       quoteRole: document.getElementById('quote-role'),
@@ -519,6 +544,60 @@
       jsonFileInput: document.getElementById('json-file-input')
     };
 
+    // Returns MM-DD format for calendar matching (e.g., '09-02')
+    function getSystemTodayKey() {
+      const now = new Date();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      return `${mm}-${dd}`;
+    }
+
+    // Retrieve active dataset based on selected date
+    function getActiveDateDataSet() {
+      if (DATABASE.dates && DATABASE.dates[activeDateKey]) {
+        return DATABASE.dates[activeDateKey];
+      }
+      // If flat structure or key not found, fallback to first available date or root
+      if (DATABASE.dates) {
+        const firstKey = Object.keys(DATABASE.dates)[0];
+        if (firstKey) return DATABASE.dates[firstKey];
+      }
+      return DATABASE;
+    }
+
+    // Populate the header date selector dropdown
+    function populateDateSelector() {
+      if (!elements.dateSelect) return;
+      elements.dateSelect.innerHTML = '';
+
+      if (DATABASE.dates && Object.keys(DATABASE.dates).length > 0) {
+        const sysToday = getSystemTodayKey();
+        const keys = Object.keys(DATABASE.dates);
+
+        // Check if today exists in the keys
+        if (keys.includes(sysToday)) {
+          activeDateKey = sysToday;
+        } else if (!keys.includes(activeDateKey)) {
+          activeDateKey = keys[0];
+        }
+
+        keys.forEach(key => {
+          const opt = document.createElement('option');
+          opt.value = key;
+          opt.className = "bg-slate-900 text-slate-200";
+          const itemLabel = DATABASE.dates[key].label || key;
+          opt.textContent = key === sysToday ? `${itemLabel} (Today)` : itemLabel;
+          if (key === activeDateKey) opt.selected = true;
+          elements.dateSelect.appendChild(opt);
+        });
+      } else {
+        const opt = document.createElement('option');
+        opt.value = "default";
+        opt.textContent = "General Kickoff Deck";
+        elements.dateSelect.appendChild(opt);
+      }
+    }
+
     // Update Data Status Indicator
     function updateDataStatus(status, isLive = true) {
       elements.dataStatusText.textContent = status;
@@ -538,31 +617,44 @@
         }
         const data = await response.json();
         
-        // Validate required sections
-        if (data.quotes && data.jokes && data.history) {
+        // Accept both date-partitioned JSON and flat JSON
+        if (data.dates && Object.keys(data.dates).length > 0) {
           DATABASE = data;
+          populateDateSelector();
+          const activeSet = getActiveDateDataSet();
+          const dateLabel = activeSet.label || activeDateKey;
+          updateDataStatus(`Loaded ${customUrl} (${dateLabel})`, true);
+          showToast(`Loaded dates from JSON! Active: ${dateLabel}`);
+          shuffleAll();
+          return true;
+        } else if (data.quotes && data.jokes && data.history) {
+          // Wrap legacy flat format into a single date
+          DATABASE = { dates: { "default": { label: "Class Kickoff Deck", ...data } } };
+          populateDateSelector();
           updateDataStatus(`Loaded ${customUrl}`, true);
-          showToast(`Loaded ${data.quotes.length} quotes, ${data.jokes.length} jokes, & ${data.history.length} history events!`);
+          showToast(`Loaded ${data.quotes.length} quotes, ${data.jokes.length} jokes, & ${data.history.length} events!`);
           shuffleAll();
           return true;
         } else {
-          throw new Error('Invalid JSON format: missing quotes, jokes, or history keys');
+          throw new Error('Invalid JSON format: missing dates or items');
         }
       } catch (err) {
         console.warn('Could not auto-fetch data.json:', err.message);
         DATABASE = FALLBACK_DATABASE;
+        populateDateSelector();
         updateDataStatus('Using Default Data (JSON offline)', false);
         shuffleAll();
         return false;
       }
     }
 
-    // Filter items based on selected category
+    // Filter items based on selected category & active date
     function getFilteredList(type) {
-      if (!DATABASE[type] || DATABASE[type].length === 0) return [];
-      if (currentCategory === 'all') return DATABASE[type];
-      const filtered = DATABASE[type].filter(item => item.category === currentCategory || !item.category);
-      return filtered.length > 0 ? filtered : DATABASE[type];
+      const activeSet = getActiveDateDataSet();
+      if (!activeSet || !activeSet[type] || activeSet[type].length === 0) return [];
+      if (currentCategory === 'all') return activeSet[type];
+      const filtered = activeSet[type].filter(item => item.category === currentCategory || !item.category);
+      return filtered.length > 0 ? filtered : activeSet[type];
     }
 
     // Render Quote Card
@@ -614,8 +706,9 @@
       if (activeHistoryIndex >= list.length) activeHistoryIndex = 0;
 
       const item = list[activeHistoryIndex];
+      const activeSet = getActiveDateDataSet();
       elements.historyYear.textContent = item.year || "";
-      elements.historyDate.textContent = item.date || "On This Day";
+      elements.historyDate.textContent = item.date || activeSet.label || "On This Day";
       elements.historyTitle.textContent = item.title || "";
       elements.historyDesc.textContent = item.desc || "";
       elements.historyQuote.textContent = item.historicalQuote ? `"${item.historicalQuote}"` : "";
@@ -623,12 +716,15 @@
       elements.historyTakeaway.textContent = item.takeaway || "";
 
       // Presenter overlay sync
-      elements.fsHistoryYear.textContent = `${item.date || ''} ${item.year || ''}`;
+      elements.fsHistoryYear.textContent = `${item.date || activeSet.label || ''} ${item.year || ''}`;
       elements.fsHistoryTitle.textContent = item.title;
       elements.fsHistoryDesc.textContent = item.desc;
       elements.fsHistoryQuote.textContent = item.historicalQuote ? `"${item.historicalQuote}"` : "";
       elements.fsHistorySpeaker.textContent = item.speaker ? `— ${item.speaker}` : "";
       elements.fsHistoryTakeaway.textContent = item.takeaway || "";
+
+      // Presenter header date sync
+      elements.fsDateDisplay.textContent = `${activeSet.label || 'Today'}'s Starter Deck`;
     }
 
     // Shuffle All Cards
@@ -735,6 +831,21 @@ Entrepreneurial Lesson: ${history.takeaway || ''}`;
 
     // Setup Event Listeners
     function setupEventListeners() {
+      // Date Selector Change
+      if (elements.dateSelect) {
+        elements.dateSelect.addEventListener('change', (e) => {
+          activeDateKey = e.target.value;
+          const activeSet = getActiveDateDataSet();
+          showToast(`Switched date to ${activeSet.label || activeDateKey}`);
+          activeQuoteIndex = 0;
+          activeJokeIndex = 0;
+          activeHistoryIndex = 0;
+          renderQuote();
+          renderJoke();
+          renderHistory();
+        });
+      }
+
       // Category Buttons
       document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -811,13 +922,20 @@ Entrepreneurial Lesson: ${history.takeaway || ''}`;
         reader.onload = (event) => {
           try {
             const parsed = JSON.parse(event.target.result);
-            if (parsed.quotes && parsed.jokes && parsed.history) {
+            if (parsed.dates && Object.keys(parsed.dates).length > 0) {
               DATABASE = parsed;
+              populateDateSelector();
+              updateDataStatus(`Custom File: ${file.name}`, true);
+              showToast(`Imported ${file.name} successfully!`);
+              shuffleAll();
+            } else if (parsed.quotes && parsed.jokes && parsed.history) {
+              DATABASE = { dates: { "custom": { label: file.name.replace('.json', ''), ...parsed } } };
+              populateDateSelector();
               updateDataStatus(`Custom File: ${file.name}`, true);
               showToast(`Imported ${file.name} successfully!`);
               shuffleAll();
             } else {
-              showToast("Error: JSON must include quotes, jokes, and history arrays.");
+              showToast("Error: JSON format unrecognized.");
             }
           } catch (err) {
             showToast("Failed to parse JSON file.");
