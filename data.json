@@ -1,166 +1,144 @@
 {
-  "quotes": [
-    {
-      "quote": "The way to get started is to quit talking and begin doing.",
-      "author": "Walt Disney",
-      "role": "Founder, The Walt Disney Company",
-      "prompt": "What is one idea you have discussed a lot that you can start building today?",
-      "category": "mindset"
-    },
-    {
-      "quote": "Don't be intimidated by what you don't know. That can be your greatest strength and ensure you do things differently.",
-      "author": "Sara Blakely",
-      "role": "Founder, Spanx",
-      "prompt": "What is an industry standard that you think can be completely reinvented?",
-      "category": "mindset"
-    },
-    {
-      "quote": "If you are not embarrassed by the first version of your product, you've launched too late.",
-      "author": "Reid Hoffman",
-      "role": "Co-Founder, LinkedIn",
-      "prompt": "Why is shipping an imperfect Minimum Viable Product better than endless planning?",
-      "category": "innovation"
-    },
-    {
-      "quote": "Your most unhappy customers are your greatest source of learning.",
-      "author": "Bill Gates",
-      "role": "Co-Founder, Microsoft",
-      "prompt": "How can customer complaints actually serve as free business advice?",
-      "category": "business"
-    },
-    {
-      "quote": "Failure is an option here. If things are not failing, you are not innovating enough.",
-      "author": "Elon Musk",
-      "role": "CEO, SpaceX & Tesla",
-      "prompt": "How do you distinguish between a smart mistake and a sloppy failure?",
-      "category": "innovation"
-    },
-    {
-      "quote": "Whether you think you can, or you think you can't – you're right.",
-      "author": "Henry Ford",
-      "role": "Founder, Ford Motor Company",
-      "prompt": "How does your mindset directly impact your ability to overcome project roadblocks?",
-      "category": "mindset"
-    },
-    {
-      "quote": "If you double the number of experiments you do per year, you're going to double your inventiveness.",
-      "author": "Jeff Bezos",
-      "role": "Founder, Amazon",
-      "prompt": "What is a quick experiment you could run this week to test a customer preference?",
-      "category": "business"
-    },
-    {
-      "quote": "Chase the vision, not the money; the money will end up following you.",
-      "author": "Tony Hsieh",
-      "role": "Former CEO, Zappos",
-      "prompt": "Why is customer obsession more sustainable than focusing purely on short-term profits?",
-      "category": "business"
-    }
-  ],
-  "jokes": [
-    {
-      "setup": "Why did the entrepreneur open a bakery?",
-      "punchline": "Because they wanted to make some serious dough!",
-      "tag": "Business Pun",
-      "category": "business"
-    },
-    {
-      "setup": "Why was the computer late to the startup meeting?",
-      "punchline": "It had a hard drive!",
-      "tag": "Tech Humor",
-      "category": "innovation"
-    },
-    {
-      "setup": "How do accountants pay for their morning coffee?",
-      "punchline": "With liquid assets!",
-      "tag": "Finance Pun",
-      "category": "business"
-    },
-    {
-      "setup": "Why did the smartphone get hired on the spot?",
-      "punchline": "Because it had outstanding cell-ular skills!",
-      "tag": "Tech Humor",
-      "category": "innovation"
-    },
-    {
-      "setup": "What is a startup founder's favorite place to sleep?",
-      "punchline": "In a pitch tent!",
-      "tag": "Startup Joke",
-      "category": "mindset"
-    },
-    {
-      "setup": "Why did the billboard company hire a new graphic designer?",
-      "punchline": "They wanted to make a clear sign of progress!",
-      "tag": "Marketing Pun",
-      "category": "business"
-    },
-    {
-      "setup": "Why don't scientists trust atoms in business meetings?",
-      "punchline": "Because they make up everything!",
-      "tag": "Science & Work",
-      "category": "mindset"
-    }
-  ],
-  "history": [
-    {
-      "date": "August 26",
-      "year": "1856",
-      "title": "Teenager Patents World's First Synthetic Dye",
-      "desc": "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.",
-      "historicalQuote": "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution.",
-      "speaker": "William Henry Perkin",
-      "takeaway": "Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.",
-      "category": "innovation"
-    },
-    {
-      "date": "August 26",
-      "year": "1935",
-      "title": "Birth of Karen Spärck Jones (Search Engine Pioneer)",
-      "desc": "Computer scientist Karen Spärck Jones was born on this day. She created IDF (Inverse Document Frequency), the core statistical formula behind modern web search engines like Google.",
-      "historicalQuote": "Computing is too important to be left to men. Words are the most complex form of data we have.",
-      "speaker": "Karen Spärck Jones (Computer Scientist)",
-      "takeaway": "Fundamental math formulas created decades ago power today's multi-trillion dollar search technologies.",
-      "category": "innovation"
-    },
-    {
-      "date": "August 26",
-      "year": "1938",
-      "title": "First Audio Tape Recorder Used in Live Radio Broadcast",
-      "desc": "New York radio station WQXR broadcasted live using a magnetic tape recorder for the first time, revolutionizing audio broadcasting and media distribution.",
-      "historicalQuote": "Recorded media liberates broadcasting from the constraints of live execution.",
-      "speaker": "WQXR Broadcast Announcement",
-      "takeaway": "Time-shifting tech allows creators to build content once and scale distribution endlessly.",
-      "category": "business"
-    },
-    {
-      "date": "August 26",
-      "year": "1873",
-      "title": "Birth of Lee de Forest (Inventor of Vacuum Tube)",
-      "desc": "Inventor Lee de Forest was born. His invention of the Audion vacuum tube enabled sound amplification, making radio broadcasts, sound films, and early computers possible.",
-      "historicalQuote": "I discovered an invisible empire of the air, and electronic amplification will build the modern world.",
-      "speaker": "Lee de Forest",
-      "takeaway": "Core hardware inventions unlock entirely new consumer media and computing industries.",
-      "category": "innovation"
-    },
-    {
-      "date": "August 26",
-      "year": "1743",
-      "title": "Birth of Antoine Lavoisier (Father of Chemistry)",
-      "desc": "Antoine Lavoisier was born on this day. He transformed chemistry from guesswork into a quantitative science, named Oxygen and Hydrogen, and stated the Law of Conservation of Mass.",
-      "historicalQuote": "Nothing is lost, nothing is created, everything is transformed.",
-      "speaker": "Antoine Lavoisier",
-      "takeaway": "Rigorous measurement and data collection convert messy concepts into predictable market frameworks.",
-      "category": "mindset"
-    },
-    {
-      "date": "August 26",
-      "year": "1920",
-      "title": "19th Amendment Certified (Women's Equality Day)",
-      "desc": "The 19th Amendment was officially certified on this day, granting women the right to vote in the U.S. and opening new horizons for female leadership and business ownership.",
-      "historicalQuote": "The day will come when men will recognize women as their peers, not only at the fireside, but in the councils of the nation.",
-      "speaker": "Susan B. Anthony",
-      "takeaway": "Expanding workforce and civic participation drives exponential growth in innovation and enterprise.",
-      "category": "business"
-    }
-  ]
+"dates": {
+"09-02": {
+"label": "September 2",
+"quotes": [
+{
+"quote": "Success breeds complacency. Complacency breeds failure. Only the paranoid survive.",
+"author": "Andy Grove",
+"role": "Co-Founder & 3rd CEO, Intel (Born Sept 2, 1936)",
+"prompt": "How do market-leading businesses prevent complacency before a new disruptor arrives?",
+"category": "mindset"
+},
+{
+"quote": "The only way to win is to learn faster than anyone else.",
+"author": "Eric Ries",
+"role": "Author, The Lean Startup",
+"prompt": "What fast feedback loop can an early-stage startup build to test customer demand?",
+"category": "innovation"
+},
+{
+"quote": "You don't need a 100-person company to develop that idea. You just need a relentless focus on execution.",
+"author": "Larry Page",
+"role": "Co-Founder, Google",
+"prompt": "Why can a tiny, focused startup move faster than a billion-dollar legacy corporation?",
+"category": "business"
+}
+],
+"jokes": [
+{
+"setup": "Why was the first ATM in 1969 such a great entrepreneur?",
+"punchline": "Because it had outstanding cash flow and worked 24/7 without taking a coffee break!",
+"tag": "Fintech & Banking",
+"category": "business"
+},
+{
+"setup": "Why did the UCLA computer science team celebrate on September 2nd?",
+"punchline": "Because their first IMP on the ARPANET made an unforgettable connection!",
+"tag": "Tech History",
+"category": "innovation"
+},
+{
+"setup": "Why do microchip founders stay calm during market downturns?",
+"punchline": "Because they know how to stay cool under high micro-pressure!",
+"tag": "Hardware Humor",
+"category": "mindset"
+}
+],
+"history": [
+{
+"date": "September 2",
+"year": "1969",
+"title": "Birth of ARPANET: The Infant Internet Takes Its First Breath",
+"desc": "At UCLA, computer scientist Leonard Kleinrock's team connected a host computer to an Interface Message Processor (IMP), transmitting data packets between machines for the very first time. This marked the official birth of ARPANET, the technical foundation of the global Internet.",
+"historicalQuote": "This was the day the infant Internet took its first breath of life, proving packet-switching could link machines together.",
+"speaker": "Dr. Leonard Kleinrock (Internet Pioneer & UCLA Professor)",
+"takeaway": "Revolutionary platforms start by getting two simple nodes talking to each other before scaling to billions of users.",
+"category": "innovation"
+},
+{
+"date": "September 2",
+"year": "1969",
+"title": "America's First ATM Installed at Chemical Bank",
+"desc": "Chemical Bank in Rockville Centre, New York unveiled the first Automated Teller Machine (Docutel) in the United States, kickstarting the modern 24/7 self-service fintech revolution.",
+"historicalQuote": "On September 2, our bank will open at 9:00 AM and never close again!",
+"speaker": "Chemical Bank Launch Campaign (1969)",
+"takeaway": "Eliminating consumer friction points through automation creates 24/7 accessibility and permanently shifts industry standards.",
+"category": "business"
+},
+{
+"date": "September 2",
+"year": "1936",
+"title": "Birth of Andy Grove (Intel CEO & Silicon Valley Icon)",
+"desc": "Andy Grove was born in Budapest. Fleeing the 1956 Hungarian revolution to the U.S., he became employee #3 and CEO of Intel, steering its legendary pivot from memory chips to microprocessors that catalyzed the personal computer boom.",
+"historicalQuote": "There are at least two years where every company is vulnerable to disruption. Only the paranoid survive.",
+"speaker": "Andy Grove (Former Intel CEO & Author)",
+"takeaway": "Resilient entrepreneurs recognize strategic inflection points and pivot before declining legacy products destroy the business.",
+"category": "mindset"
+}
+]
+},
+"08-26": {
+"label": "August 26",
+"quotes": [
+{
+"quote": "The way to get started is to quit talking and begin doing.",
+"author": "Walt Disney",
+"role": "Founder, The Walt Disney Company",
+"prompt": "What is one idea you have discussed a lot that you can start building today?",
+"category": "mindset"
+},
+{
+"quote": "Don't be intimidated by what you don't know. That can be your greatest strength and ensure you do things differently.",
+"author": "Sara Blakely",
+"role": "Founder, Spanx",
+"prompt": "What is an industry standard that you think can be completely reinvented?",
+"category": "mindset"
+},
+{
+"quote": "Your most unhappy customers are your greatest source of learning.",
+"author": "Bill Gates",
+"role": "Co-Founder, Microsoft",
+"prompt": "How can customer complaints actually serve as free business advice?",
+"category": "business"
+}
+],
+"jokes": [
+{
+"setup": "Why did the entrepreneur open a bakery?",
+"punchline": "Because they wanted to make some serious dough!",
+"tag": "Business Pun",
+"category": "business"
+},
+{
+"setup": "Why was the computer late to the startup meeting?",
+"punchline": "It had a hard drive!",
+"tag": "Tech Humor",
+"category": "innovation"
+}
+],
+"history": [
+{
+"date": "August 26",
+"year": "1856",
+"title": "Teenager Patents World's First Synthetic Dye",
+"desc": "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.",
+"historicalQuote": "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution.",
+"speaker": "William Henry Perkin",
+"takeaway": "Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.",
+"category": "innovation"
+},
+{
+"date": "August 26",
+"year": "1935",
+"title": "Birth of Karen Spärck Jones (Search Engine Pioneer)",
+"desc": "Computer scientist Karen Spärck Jones was born on this day. She created IDF (Inverse Document Frequency), the core statistical formula behind modern web search engines like Google.",
+"historicalQuote": "Computing is too important to be left to men. Words are the most complex form of data we have.",
+"speaker": "Karen Spärck Jones (Computer Scientist)",
+"takeaway": "Fundamental math formulas created decades ago power today's multi-trillion dollar search technologies.",
+"category": "innovation"
+}
+]
+}
+}
 }
