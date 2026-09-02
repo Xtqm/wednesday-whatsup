@@ -38,20 +38,6 @@
     }
   </script>
   <style>
-    /* Custom perspective for 3D card flips */
-    .perspective-1000 {
-      perspective: 1000px;
-    }
-    .transform-style-3d {
-      transform-style: preserve-3d;
-    }
-    .backface-hidden {
-      backface-visibility: hidden;
-    }
-    .rotate-y-180 {
-      transform: rotateY(180deg);
-    }
-    
     /* Scrollbar styling */
     ::-webkit-scrollbar {
       width: 6px;
@@ -68,6 +54,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-full flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
+  <!-- TOP HEADER -->
   <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <div class="flex items-center space-x-3">
@@ -85,11 +72,18 @@
 
       <!-- Quick Actions -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- Date Badge -->
-        <div class="hidden md:flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 text-xs font-medium text-slate-300">
-          <i class="fa-regular fa-calendar-check text-brand-400"></i>
-          <span id="current-date-display">Today</span>
+        <!-- Data Source Status Badge -->
+        <div id="data-status-badge" class="hidden lg:flex items-center space-x-1.5 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700/60 text-[11px] font-medium text-slate-400" title="Source of today's slide content">
+          <span class="w-2 h-2 rounded-full bg-amber-400" id="data-status-dot"></span>
+          <span id="data-status-text">Loading JSON...</span>
         </div>
+
+        <!-- Hidden JSON File Input for direct upload -->
+        <input type="file" id="json-file-input" accept=".json" class="hidden">
+        <button id="import-json-btn" title="Load custom JSON file from computer" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+          <i class="fa-solid fa-file-code text-cyan-400"></i>
+          <span class="hidden sm:inline">Import JSON</span>
+        </button>
 
         <button id="copy-summary-btn" title="Copy slide content to clipboard" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition active:scale-95">
           <i class="fa-regular fa-copy text-brand-400"></i>
@@ -104,8 +98,10 @@
     </div>
   </header>
 
+  <!-- MAIN VIEW CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
     
+    <!-- Controls Toolbar -->
     <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-slate-950/40 p-3 rounded-2xl border border-slate-800/80">
       
       <!-- Category Filter Tabs -->
@@ -124,7 +120,7 @@
         </button>
       </div>
 
-      <!-- Control Buttons -->
+      <!-- Action Buttons -->
       <div class="flex items-center space-x-3 shrink-0 justify-end">
         <!-- Built-in Timer Button -->
         <button id="timer-toggle-btn" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium flex items-center gap-2 border border-slate-700 transition">
@@ -159,17 +155,17 @@
 
           <blockquote class="my-4">
             <p id="quote-text" class="text-xl font-bold text-slate-100 leading-relaxed italic">
-              "The secret to getting ahead is getting started."
+              "Loading quote..."
             </p>
           </blockquote>
 
           <div class="mt-4 flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-sm" id="quote-avatar">
-              M
+              Q
             </div>
             <div>
-              <p id="quote-author" class="text-sm font-semibold text-amber-300">Mark Twain</p>
-              <p id="quote-role" class="text-xs text-slate-400">Author & Entrepreneur</p>
+              <p id="quote-author" class="text-sm font-semibold text-amber-300">Author</p>
+              <p id="quote-role" class="text-xs text-slate-400">Role / Title</p>
             </div>
           </div>
         </div>
@@ -180,7 +176,7 @@
             <i class="fa-solid fa-comments"></i> Classroom Reflection Prompt:
           </p>
           <p id="quote-prompt" class="text-xs text-slate-300 leading-relaxed">
-            What is one small step you can take today on your main project to build instant momentum?
+            Discussion prompt will appear here...
           </p>
         </div>
       </div>
@@ -200,9 +196,9 @@
           </div>
 
           <div class="my-3">
-            <span id="joke-tag" class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest bg-slate-800 px-2 py-0.5 rounded">Startup Pun</span>
+            <span id="joke-tag" class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest bg-slate-800 px-2 py-0.5 rounded">Category</span>
             <p id="joke-setup" class="text-lg font-semibold text-slate-100 mt-2 leading-relaxed">
-              Why did the entrepreneur open a bakery?
+              Loading joke setup...
             </p>
           </div>
         </div>
@@ -215,7 +211,7 @@
               <span class="text-xs font-semibold">Click / Tap to reveal punchline!</span>
             </div>
             <div id="punchline-text" class="hidden text-base font-bold text-cyan-300 animate-bounce-short">
-              "Because they wanted to make some serious dough!"
+              Punchline
             </div>
           </div>
 
@@ -240,7 +236,7 @@
         <div>
           <div class="flex items-center justify-between mb-4">
             <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-md border border-emerald-400/20">
-              <i class="fa-solid fa-clock-rotate-left"></i> On This Day (Aug 26)
+              <i class="fa-solid fa-clock-rotate-left"></i> On This Day
             </span>
             <button id="next-history-btn" title="Next Milestone" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition active:scale-95 border border-slate-700">
               <i class="fa-solid fa-rotate text-xs"></i>
@@ -248,16 +244,16 @@
           </div>
 
           <div class="flex items-baseline gap-2 mb-2">
-            <span id="history-year" class="text-2xl font-extrabold text-emerald-400">1856</span>
-            <span id="history-date" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">August 26</span>
+            <span id="history-year" class="text-2xl font-extrabold text-emerald-400">Year</span>
+            <span id="history-date" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</span>
           </div>
 
           <h3 id="history-title" class="text-lg font-bold text-slate-100 leading-snug mb-2">
-            Teenager Patents World's First Synthetic Dye
+            Loading Historical Milestone...
           </h3>
 
           <p id="history-desc" class="text-xs text-slate-300 leading-relaxed mb-3">
-            18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, created by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.
+            Description will appear here...
           </p>
 
           <!-- Words Spoken On This Day Block -->
@@ -266,10 +262,10 @@
               <i class="fa-solid fa-quote-left text-xs"></i> Words Spoken On This Day:
             </p>
             <p id="history-quote" class="text-xs italic font-medium text-emerald-100 leading-relaxed">
-              "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution."
+              "Historical Quote..."
             </p>
             <p id="history-speaker" class="text-[11px] font-semibold text-emerald-400/90 text-right mt-1">
-              — William Henry Perkin
+              — Speaker
             </p>
           </div>
         </div>
@@ -281,7 +277,7 @@
               <i class="fa-solid fa-graduation-cap"></i> Entrepreneur Takeaway:
             </p>
             <p id="history-takeaway" class="text-xs text-slate-300">
-              Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.
+              Takeaway will appear here...
             </p>
           </div>
         </div>
@@ -289,7 +285,7 @@
 
     </div>
 
-    <!-- ICEBREAKER TIMER MODAL / DRAWER -->
+    <!-- ICEBREAKER TIMER MODAL -->
     <div id="timer-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-center">
         <button id="close-timer-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white">
@@ -415,14 +411,14 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-500 text-slate-950 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-semibold text-xs">
       <i class="fa-solid fa-circle-check text-base"></i>
-      <span id="toast-message">Slide summary copied to clipboard!</span>
+      <span id="toast-message">Notification message</span>
     </div>
 
   </main>
 
   <script>
-    // DATABASE OF CURATED ENTREPRENEURSHIP CONTENT
-    const DATABASE = {
+    // DEFAULT EMBEDDED BACKUP IN CASE JSON CANNOT BE LOADED VIA FETCH
+    const FALLBACK_DATABASE = {
       quotes: [
         {
           quote: "The way to get started is to quit talking and begin doing.",
@@ -432,53 +428,11 @@
           category: "mindset"
         },
         {
-          quote: "Don't be intimidated by what you don't know. That can be your greatest strength and ensure you do things differently.",
+          quote: "Don't be intimidated by what you don't know. That can be your greatest strength.",
           author: "Sara Blakely",
           role: "Founder, Spanx",
           prompt: "What is an industry standard that you think can be completely reinvented?",
           category: "mindset"
-        },
-        {
-          quote: "If you are not embarrassed by the first version of your product, you've launched too late.",
-          author: "Reid Hoffman",
-          role: "Co-Founder, LinkedIn",
-          prompt: "Why is shipping an imperfect Minimum Viable Product better than endless planning?",
-          category: "innovation"
-        },
-        {
-          quote: "Your most unhappy customers are your greatest source of learning.",
-          author: "Bill Gates",
-          role: "Co-Founder, Microsoft",
-          prompt: "How can customer complaints actually serve as free business advice?",
-          category: "business"
-        },
-        {
-          quote: "Failure is an option here. If things are not failing, you are not innovating enough.",
-          author: "Elon Musk",
-          role: "CEO, SpaceX & Tesla",
-          prompt: "How do you distinguish between a smart mistake and a sloppy failure?",
-          category: "innovation"
-        },
-        {
-          quote: "Whether you think you can, or you think you can't – you're right.",
-          author: "Henry Ford",
-          role: "Founder, Ford Motor Company",
-          prompt: "How does your mindset directly impact your ability to overcome project roadblocks?",
-          category: "mindset"
-        },
-        {
-          quote: "If you double the number of experiments you do per year, you're going to double your inventiveness.",
-          author: "Jeff Bezos",
-          role: "Founder, Amazon",
-          prompt: "What is a quick experiment you could run this week to test a customer preference?",
-          category: "business"
-        },
-        {
-          quote: "Chase the vision, not the money; the money will end up following you.",
-          author: "Tony Hsieh",
-          role: "Former CEO, Zappos",
-          prompt: "Why is customer obsession more sustainable than focusing purely on short-term profits?",
-          category: "business"
         }
       ],
       jokes: [
@@ -487,42 +441,6 @@
           punchline: "Because they wanted to make some serious dough!",
           tag: "Business Pun",
           category: "business"
-        },
-        {
-          setup: "Why was the computer late to the startup meeting?",
-          punchline: "It had a hard drive!",
-          tag: "Tech Humor",
-          category: "innovation"
-        },
-        {
-          setup: "How do accountants pay for their morning coffee?",
-          punchline: "With liquid assets!",
-          tag: "Finance Pun",
-          category: "business"
-        },
-        {
-          setup: "Why did the smartphone get hired on the spot?",
-          punchline: "Because it had outstanding cell-ular skills!",
-          tag: "Tech Humor",
-          category: "innovation"
-        },
-        {
-          setup: "What is a startup founder's favorite place to sleep?",
-          punchline: "In a pitch tent!",
-          tag: "Startup Joke",
-          category: "mindset"
-        },
-        {
-          setup: "Why did the billboard company hire a new graphic designer?",
-          punchline: "They wanted to make a clear sign of progress!",
-          tag: "Marketing Pun",
-          category: "business"
-        },
-        {
-          setup: "Why don't scientists trust atoms in business meetings?",
-          punchline: "Because they make up everything!",
-          tag: "Science & Work",
-          category: "mindset"
         }
       ],
       history: [
@@ -530,64 +448,17 @@
           date: "August 26",
           year: "1856",
           title: "Teenager Patents World's First Synthetic Dye",
-          desc: "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine. He built a factory and launched the modern chemical industry.",
+          desc: "18-year-old chemist William Henry Perkin patented mauveine, the first synthetic dye, discovered by accident while trying to synthesize malaria medicine.",
           historicalQuote: "Accidental discoveries mean nothing unless you have the vision to turn a lab mistake into a global market solution.",
           speaker: "William Henry Perkin",
           takeaway: "Great entrepreneurs recognize opportunity in accidental outcomes rather than throwing failed experiments away.",
           category: "innovation"
-        },
-        {
-          date: "August 26",
-          year: "1935",
-          title: "Birth of Karen Spärck Jones (Search Engine Pioneer)",
-          desc: "Computer scientist Karen Spärck Jones was born on this day. She created IDF (Inverse Document Frequency), the core statistical formula behind modern web search engines like Google.",
-          historicalQuote: "Computing is too important to be left to men. Words are the most complex form of data we have.",
-          speaker: "Karen Spärck Jones (Computer Scientist)",
-          takeaway: "Fundamental math formulas created decades ago power today's multi-trillion dollar search technologies.",
-          category: "innovation"
-        },
-        {
-          date: "August 26",
-          year: "1938",
-          title: "First Audio Tape Recorder Used in Live Radio Broadcast",
-          desc: "New York radio station WQXR broadcasted live using a magnetic tape recorder for the first time, revolutionizing audio broadcasting and media distribution.",
-          historicalQuote: "Recorded media liberates broadcasting from the constraints of live execution.",
-          speaker: "WQXR Broadcast Announcement",
-          takeaway: "Time-shifting tech allows creators to build content once and scale distribution endlessly.",
-          category: "business"
-        },
-        {
-          date: "August 26",
-          year: "1873",
-          title: "Birth of Lee de Forest (Inventor of Vacuum Tube)",
-          desc: "Inventor Lee de Forest was born. His invention of the Audion vacuum tube enabled sound amplification, making radio broadcasts, sound films, and early computers possible.",
-          historicalQuote: "I discovered an invisible empire of the air, and electronic amplification will build the modern world.",
-          speaker: "Lee de Forest",
-          takeaway: "Core hardware inventions unlock entirely new consumer media and computing industries.",
-          category: "innovation"
-        },
-        {
-          date: "August 26",
-          year: "1743",
-          title: "Birth of Antoine Lavoisier (Father of Chemistry)",
-          desc: "Antoine Lavoisier was born on this day. He transformed chemistry from guesswork into a quantitative science, named Oxygen and Hydrogen, and stated the Law of Conservation of Mass.",
-          historicalQuote: "Nothing is lost, nothing is created, everything is transformed.",
-          speaker: "Antoine Lavoisier",
-          takeaway: "Rigorous measurement and data collection convert messy concepts into predictable market frameworks.",
-          category: "mindset"
-        },
-        {
-          date: "August 26",
-          year: "1920",
-          title: "19th Amendment Certified (Women's Equality Day)",
-          desc: "The 19th Amendment was officially certified on this day, granting women the right to vote in the U.S. and opening new horizons for female leadership and business ownership.",
-          historicalQuote: "The day will come when men will recognize women as their peers, not only at the fireside, but in the councils of the nation.",
-          speaker: "Susan B. Anthony",
-          takeaway: "Expanding workforce and civic participation drives exponential growth in innovation and enterprise.",
-          category: "business"
         }
       ]
     };
+
+    // ACTIVE DATABASE
+    let DATABASE = { ...FALLBACK_DATABASE };
 
     // App State Variables
     let currentCategory = 'all';
@@ -598,11 +469,11 @@
     let fsJokeRevealed = false;
 
     // Timer state
-    let timerDuration = 120; // 2 mins default
+    let timerDuration = 120;
     let timerRemaining = 120;
     let timerInterval = null;
 
-    // DOM Elements
+    // DOM Elements Cache
     const elements = {
       quoteText: document.getElementById('quote-text'),
       quoteAuthor: document.getElementById('quote-author'),
@@ -642,22 +513,56 @@
 
       toast: document.getElementById('toast'),
       toastMessage: document.getElementById('toast-message'),
-      currentDateDisplay: document.getElementById('current-date-display')
+      dataStatusBadge: document.getElementById('data-status-badge'),
+      dataStatusText: document.getElementById('data-status-text'),
+      dataStatusDot: document.getElementById('data-status-dot'),
+      jsonFileInput: document.getElementById('json-file-input')
     };
 
-    // Initialize date display
-    function initDate() {
-      const now = new Date();
-      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-      const formatted = now.toLocaleDateString('en-US', options);
-      elements.currentDateDisplay.textContent = formatted;
-      elements.fsDateDisplay.textContent = formatted;
+    // Update Data Status Indicator
+    function updateDataStatus(status, isLive = true) {
+      elements.dataStatusText.textContent = status;
+      if (isLive) {
+        elements.dataStatusDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+      } else {
+        elements.dataStatusDot.className = "w-2 h-2 rounded-full bg-amber-400";
+      }
+    }
+
+    // LOAD DATA FROM JSON FILE (fetch with fallback & local file parser)
+    async function loadJsonDatabase(customUrl = './data.json') {
+      try {
+        const response = await fetch(customUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Validate required sections
+        if (data.quotes && data.jokes && data.history) {
+          DATABASE = data;
+          updateDataStatus(`Loaded ${customUrl}`, true);
+          showToast(`Loaded ${data.quotes.length} quotes, ${data.jokes.length} jokes, & ${data.history.length} history events!`);
+          shuffleAll();
+          return true;
+        } else {
+          throw new Error('Invalid JSON format: missing quotes, jokes, or history keys');
+        }
+      } catch (err) {
+        console.warn('Could not auto-fetch data.json:', err.message);
+        DATABASE = FALLBACK_DATABASE;
+        updateDataStatus('Using Default Data (JSON offline)', false);
+        shuffleAll();
+        return false;
+      }
     }
 
     // Filter items based on selected category
     function getFilteredList(type) {
+      if (!DATABASE[type] || DATABASE[type].length === 0) return [];
       if (currentCategory === 'all') return DATABASE[type];
-      return DATABASE[type].filter(item => item.category === currentCategory || !item.category);
+      const filtered = DATABASE[type].filter(item => item.category === currentCategory || !item.category);
+      return filtered.length > 0 ? filtered : DATABASE[type];
     }
 
     // Render Quote Card
@@ -668,15 +573,15 @@
       
       const item = list[activeQuoteIndex];
       elements.quoteText.textContent = `"${item.quote}"`;
-      elements.quoteAuthor.textContent = item.author;
-      elements.quoteRole.textContent = item.role;
-      elements.quotePrompt.textContent = item.prompt;
-      elements.quoteAvatar.textContent = item.author.charAt(0);
+      elements.quoteAuthor.textContent = item.author || "Anonymous";
+      elements.quoteRole.textContent = item.role || "";
+      elements.quotePrompt.textContent = item.prompt || "How can you apply this mindset today?";
+      elements.quoteAvatar.textContent = (item.author || "Q").charAt(0).toUpperCase();
 
       // Presenter overlay sync
       elements.fsQuoteText.textContent = `"${item.quote}"`;
-      elements.fsQuoteAuthor.textContent = `— ${item.author} (${item.role})`;
-      elements.fsQuotePrompt.textContent = item.prompt;
+      elements.fsQuoteAuthor.textContent = `— ${item.author} ${item.role ? `(${item.role})` : ''}`;
+      elements.fsQuotePrompt.textContent = item.prompt || "";
     }
 
     // Render Joke Card
@@ -687,7 +592,7 @@
 
       const item = list[activeJokeIndex];
       elements.jokeSetup.textContent = item.setup;
-      elements.jokeTag.textContent = item.tag;
+      elements.jokeTag.textContent = item.tag || "Humor";
       elements.punchlineText.textContent = `"${item.punchline}"`;
 
       // Reset punchline state
@@ -709,21 +614,21 @@
       if (activeHistoryIndex >= list.length) activeHistoryIndex = 0;
 
       const item = list[activeHistoryIndex];
-      elements.historyYear.textContent = item.year;
-      elements.historyDate.textContent = item.date;
-      elements.historyTitle.textContent = item.title;
-      elements.historyDesc.textContent = item.desc;
-      elements.historyQuote.textContent = `"${item.historicalQuote}"`;
-      elements.historySpeaker.textContent = `— ${item.speaker}`;
-      elements.historyTakeaway.textContent = item.takeaway;
+      elements.historyYear.textContent = item.year || "";
+      elements.historyDate.textContent = item.date || "On This Day";
+      elements.historyTitle.textContent = item.title || "";
+      elements.historyDesc.textContent = item.desc || "";
+      elements.historyQuote.textContent = item.historicalQuote ? `"${item.historicalQuote}"` : "";
+      elements.historySpeaker.textContent = item.speaker ? `— ${item.speaker}` : "";
+      elements.historyTakeaway.textContent = item.takeaway || "";
 
       // Presenter overlay sync
-      elements.fsHistoryYear.textContent = `${item.date}, ${item.year}`;
+      elements.fsHistoryYear.textContent = `${item.date || ''} ${item.year || ''}`;
       elements.fsHistoryTitle.textContent = item.title;
       elements.fsHistoryDesc.textContent = item.desc;
-      elements.fsHistoryQuote.textContent = `"${item.historicalQuote}"`;
-      elements.fsHistorySpeaker.textContent = `— ${item.speaker}`;
-      elements.fsHistoryTakeaway.textContent = item.takeaway;
+      elements.fsHistoryQuote.textContent = item.historicalQuote ? `"${item.historicalQuote}"` : "";
+      elements.fsHistorySpeaker.textContent = item.speaker ? `— ${item.speaker}` : "";
+      elements.fsHistoryTakeaway.textContent = item.takeaway || "";
     }
 
     // Shuffle All Cards
@@ -732,14 +637,13 @@
       const jokes = getFilteredList('jokes');
       const history = getFilteredList('history');
 
-      activeQuoteIndex = Math.floor(Math.random() * quotes.length);
-      activeJokeIndex = Math.floor(Math.random() * jokes.length);
-      activeHistoryIndex = Math.floor(Math.random() * history.length);
+      if (quotes.length > 0) activeQuoteIndex = Math.floor(Math.random() * quotes.length);
+      if (jokes.length > 0) activeJokeIndex = Math.floor(Math.random() * jokes.length);
+      if (history.length > 0) activeHistoryIndex = Math.floor(Math.random() * history.length);
 
       renderQuote();
       renderJoke();
       renderHistory();
-      showToast("Shuffled new starter slide deck!");
     }
 
     // Timer Functions
@@ -789,34 +693,36 @@
       elements.toast.classList.remove('translate-y-20', 'opacity-0');
       setTimeout(() => {
         elements.toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3000);
+      }, 3200);
     }
 
     // Copy formatted slide text to clipboard
     function copySlideSummary() {
-      const quote = getFilteredList('quotes')[activeQuoteIndex];
-      const joke = getFilteredList('jokes')[activeJokeIndex];
-      const history = getFilteredList('history')[activeHistoryIndex];
+      const quoteList = getFilteredList('quotes');
+      const jokeList = getFilteredList('jokes');
+      const historyList = getFilteredList('history');
+
+      const quote = quoteList[activeQuoteIndex] || {};
+      const joke = jokeList[activeJokeIndex] || {};
+      const history = historyList[activeHistoryIndex] || {};
 
       const text = `🚀 ENTREPRENEURSHIP CLASS DAILY STARTER
-Date: ${elements.currentDateDisplay.textContent}
 
 💡 DAILY MINDSET QUOTE:
-"${quote.quote}"
-— ${quote.author} (${quote.role})
-Discussion Prompt: ${quote.prompt}
+"${quote.quote || ''}"
+— ${quote.author || ''} (${quote.role || ''})
+Discussion Prompt: ${quote.prompt || ''}
 
 😄 MORNING HUMOR:
-Q: ${joke.setup}
-A: ${joke.punchline}
+Q: ${joke.setup || ''}
+A: ${joke.punchline || ''}
 
-📅 ON THIS DAY IN HISTORY (${history.date}, ${history.year}):
-${history.title}
-Summary: ${history.desc}
-Words Spoken On This Day: "${history.historicalQuote}" — ${history.speaker}
-Entrepreneurial Lesson: ${history.takeaway}`;
+📅 ON THIS DAY IN HISTORY (${history.date || ''}, ${history.year || ''}):
+${history.title || ''}
+Summary: ${history.desc || ''}
+Words Spoken On This Day: "${history.historicalQuote || ''}" — ${history.speaker || ''}
+Entrepreneurial Lesson: ${history.takeaway || ''}`;
 
-      // Clipboard fallback
       const dummy = document.createElement("textarea");
       document.body.appendChild(dummy);
       dummy.value = text;
@@ -831,7 +737,7 @@ Entrepreneurial Lesson: ${history.takeaway}`;
     function setupEventListeners() {
       // Category Buttons
       document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
           document.querySelectorAll('.cat-btn').forEach(b => {
             b.className = 'cat-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
           });
@@ -841,22 +747,22 @@ Entrepreneurial Lesson: ${history.takeaway}`;
         });
       });
 
-      // Next Buttons
+      // Individual Card Next Buttons
       document.getElementById('next-quote-btn').addEventListener('click', () => {
         const list = getFilteredList('quotes');
-        activeQuoteIndex = (activeQuoteIndex + 1) % list.length;
+        if (list.length) activeQuoteIndex = (activeQuoteIndex + 1) % list.length;
         renderQuote();
       });
 
       document.getElementById('next-joke-btn').addEventListener('click', () => {
         const list = getFilteredList('jokes');
-        activeJokeIndex = (activeJokeIndex + 1) % list.length;
+        if (list.length) activeJokeIndex = (activeJokeIndex + 1) % list.length;
         renderJoke();
       });
 
       document.getElementById('next-history-btn').addEventListener('click', () => {
         const list = getFilteredList('history');
-        activeHistoryIndex = (activeHistoryIndex + 1) % list.length;
+        if (list.length) activeHistoryIndex = (activeHistoryIndex + 1) % list.length;
         renderHistory();
       });
 
@@ -874,7 +780,8 @@ Entrepreneurial Lesson: ${history.takeaway}`;
 
       // Presenter Overlay Punchline Reveal
       elements.fsPunchlineBox.addEventListener('click', () => {
-        const item = getFilteredList('jokes')[activeJokeIndex];
+        const list = getFilteredList('jokes');
+        const item = list[activeJokeIndex] || { punchline: "No joke loaded" };
         fsJokeRevealed = !fsJokeRevealed;
         if (fsJokeRevealed) {
           elements.fsPunchlineText.textContent = `"${item.punchline}"`;
@@ -885,12 +792,39 @@ Entrepreneurial Lesson: ${history.takeaway}`;
         }
       });
 
-      // Shuffle All Button
+      // Shuffle Buttons
       document.getElementById('shuffle-all-btn').addEventListener('click', shuffleAll);
       document.getElementById('fs-shuffle-btn').addEventListener('click', shuffleAll);
 
       // Copy Summary
       document.getElementById('copy-summary-btn').addEventListener('click', copySlideSummary);
+
+      // Import Custom JSON via File Input
+      document.getElementById('import-json-btn').addEventListener('click', () => {
+        elements.jsonFileInput.click();
+      });
+
+      elements.jsonFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            if (parsed.quotes && parsed.jokes && parsed.history) {
+              DATABASE = parsed;
+              updateDataStatus(`Custom File: ${file.name}`, true);
+              showToast(`Imported ${file.name} successfully!`);
+              shuffleAll();
+            } else {
+              showToast("Error: JSON must include quotes, jokes, and history arrays.");
+            }
+          } catch (err) {
+            showToast("Failed to parse JSON file.");
+          }
+        };
+        reader.readAsText(file);
+      });
 
       // Fullscreen Presenter Mode Toggle
       document.getElementById('fullscreen-toggle-btn').addEventListener('click', () => {
@@ -932,9 +866,8 @@ Entrepreneurial Lesson: ${history.takeaway}`;
 
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
-      initDate();
       setupEventListeners();
-      shuffleAll();
+      loadJsonDatabase('./data.json');
     });
   </script>
 </body>
